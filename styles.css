@@ -1,0 +1,60 @@
+.board {
+	width: 300px;
+	height: 300px;
+	border: 1px solid #333;
+	display: flex;
+	flex-wrap: wrap;
+	padding-top: 11px;
+    padding-left: 11px;
+	background: white;
+	margin: 0 auto;
+}
+
+.board.finished {
+	pointer-events: none;
+}
+
+h1 {
+	font-family: sans-serif;
+	text-align: center;
+}
+
+button {
+	margin: 15px auto;
+	width: 100px;
+	display: block;
+	border-radius: 4px;
+	border: 1px solid #333;
+	background: #333;
+	color: white;
+	cursor: pointer;
+	padding: 5px 0;
+	font-size: 16px;
+	text-transform: uppercase;
+	transition: color .1s linear,
+		        background .1s ease;
+}
+
+button:hover {
+    background: white;
+	color: #333;
+}
+
+span {
+    box-sizing: border-box;
+    display: block;
+    width: 100px;
+	height: 100px;
+	border: solid white;
+	border-width: 0 10px 10px 0;
+	background: #EEE;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 500%;
+    font-family: sans-serif;
+}
+
+span:hover {
+	cursor: pointer;
+}
