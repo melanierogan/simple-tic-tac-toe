@@ -1,43 +1,71 @@
-.board {
-	width: 300px;
-	height: 300px;
-	border: 1px solid #333;
-	display: flex;
-	flex-wrap: wrap;
-	padding-top: 11px;
-    padding-left: 11px;
-	background: white;
-	margin: 0 auto;
+
+html {width: 100%; height: 100%;}
+body {
+	background-color: #eff3f4; position: absolute; width: 100%; height: 100%;
+	font-size: 16px; font-family: 'Source Sans Pro', sans-serif; font-weight: 400;
+	-webkit-font-smoothing: antialiased;
 }
 
-.board.finished {
-	pointer-events: none;
+
+:root {
+
 }
 
-h1 {
-	font-family: sans-serif;
-	text-align: center;
+
+.play-button{
+  height: auto;
+  margin: 0 0;
+  font-size: 60px;
 }
 
-button {
-	margin: 15px auto;
-	width: 100px;
-	display: block;
-	border-radius: 4px;
-	border: 1px solid #333;
-	background: #333;
-	color: white;
-	cursor: pointer;
-	padding: 5px 0;
-	font-size: 16px;
-	text-transform: uppercase;
-	transition: color .1s linear,
-		        background .1s ease;
+#selection-container, #button-container, #name-container{
+  margin:0 auto;
+  display: table;
+  vertical-align: middle;
 }
 
-button:hover {
-    background: white;
-	color: #333;
+input{
+  height: 30px;
+  font-family: 'Source Sans Pro';
+  font-size: 20px;
+  margin-left: 10px;
+}
+
+p{
+  font-family: 'Source Sans Pro';
+  font-size: 20px;
+  height: 50px;
+  margin: 35px auto;
+  position: relative;
+  text-align:center; 
+  vertical-align: middle;
+
+}
+
+button{
+  height:30px;
+  font-size: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+  background-color: white;
+  border: solid black 2px;
+  font-family: 'Source Sans Pro';
+  text-align:center; 
+  vertical-align: middle;
+}
+
+#game-body {
+
+  width: 300px;
+  height: 300px;
+  padding: 15px;
+  background-color: aliceblue;
+  display:grid;
+  grid-template-columns: repeat(3,1fr);
+  grid-template-rows: repeat(3, 1fr);
+  margin: 20px auto;
+  border-radius: 10px;
+  font-family: 'Source Sans Pro';
 }
 
 span {
@@ -53,8 +81,4 @@ span {
 	justify-content: center;
 	font-size: 500%;
     font-family: sans-serif;
-}
-
-span:hover {
-	cursor: pointer;
 }
