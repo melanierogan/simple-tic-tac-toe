@@ -29,6 +29,7 @@ input{
   font-family: 'Source Sans Pro';
   font-size: 20px;
   margin-left: 10px;
+  border-radius: 4px;
 }
 
 p{
@@ -43,12 +44,13 @@ p{
 }
 
 button{
-  height:30px;
+  height:50px;
   font-size: 20px;
   margin-left: 10px;
   margin-right: 10px;
   background-color: white;
   border: solid black 2px;
+  border-radius: 4px;
   font-family: 'Source Sans Pro';
   text-align:center; 
   vertical-align: middle;
