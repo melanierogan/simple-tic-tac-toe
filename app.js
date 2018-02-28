@@ -1,138 +1,299 @@
-const items = document.getElementsByTagName('span');
-const board = document.querySelector('.board');
-const button = document.getElementsByTagName('button')[0];
-const winStatus = document.getElementsByTagName('h1')[0];
-
-let turn = 0;
-let boardItems = [];
-
-const winConditions = [
+//selection welcome screen module
+const selectionScreen = (() => {
 	
-	[0, 1, 2],
-	[3, 4, 5],
-	[6, 7, 8],
+	  //display elements
+	  let selectionContainer = document.createElement('div');
+	  let welcomeMessage = document.createElement('p');
+	  let twoPlayer = document.createElement('button');
+	  let Computer = document.createElement('button');
+	  let buttonContainer = document.createElement('table');
 	
-	[0, 3, 6],
-	[1, 4, 7],
-	[2, 5, 8],
+	  welcomeMessage.id = "welcome-message";
+	  welcomeMessage.innerHTML = "Welcome to Tic-Tac-Toe by eMel \n Select your mode:";
+	  Computer.id = "computer";
+	  Computer.innerHTML = "Computer";
+	  Computer.addEventListener('click',function (e){
+		displayName(1);
+		name2input.value = "Computer";
+		board.setMode(2);
+	  })
+	  twoPlayer.id = "two-player";
+	  twoPlayer.innerHTML = "Two Player";
+	  twoPlayer.addEventListener('click',function (e){
+		displayName(2);
+		name2input.value = "Player 2";
+		board.setMode(0);
+	  })
+	  selectionContainer.id = "selection-container";
+	  buttonContainer.id = "button-container";
 	
-	[0, 4, 8],
-	[2, 4, 6]
+	  buttonContainer.append(Computer, twoPlayer);
 	
-];
-
-class humanPlayer {
-
-}
-
-class computerPlayer {
-
-}
-
-class winningMeans {
+	  selectionContainer.append(welcomeMessage, buttonContainer);
 	
-}
-
-class Tile {
+	  //name elements
+	  let nameContainer = document.createElement('div');
+	  let nameMessage = document.createElement('p');
+	  let name1input = document.createElement('input');
+	  let name2input = document.createElement('input');
+	  let startGame = document.createElement('button');
+	  startGame.addEventListener('click',function (e){
+		if(name1input.value == "") name1input.value = "Player 1";
+		if(name2input.value == "") name2input.value = "Player 2";
+		board.addPlayers(playerFactory(name1input.value), playerFactory(name2input.value));
+		displayGame();
+	  })
 	
-	// constructor is used for setting up the variables
-	constructor (cell, index) {
-		
-		// set initial content as empty
-		this.content = '';
-		
-		// this is the cell itself
-		this.container = cell;
-		
-		this.index = index;
-		
-		this.initialize();
-		
-	}
+	  name1input.value = "Player 1";
+	  name2input.value = "Player 2";
+	  nameContainer.id = "name-container";
+	  nameMessage.innerHTML = "Input your Names:";
+	  startGame.innerHTML = "Start Game";
 	
-	addContent () {
-        this.container.innerHTML = this.content;
-	}
+	  nameContainer.append(nameMessage, name1input, name2input, startGame);
+	  nameContainer.style.display = 'none';
 	
-	clickHandler () {
-		
-		if ( this.content === '' ) {
-			
-			if ( turn === 0 ) {
-				this.content = 'X';
-				turn = 1;
-			} else {
-				this.content = 'O';
-				turn = 0;
-			}
-			
-			boardItems[this.index] = turn;
-			
+	  document.body.appendChild(nameContainer);
+	
+	  //game board elements
+	  let gameScreen = document.createElement('div');
+	  let screenText = document.createElement('p');
+	  let screenC = document.createElement('div');
+	  let gameBody = document.createElement('div');
+	  let resetBoard = document.createElement('button');
+	  let resetGame = document.createElement('button');
+	
+	  screenText.id = "screen-text";
+	  screenC.id = "screen";
+	  gameBody.id = "game-body";
+	  resetBoard.id = "reset-board";
+	  resetGame.id = "reset-game";
+	  resetBoard.innerHTML = "RESET BOARD";
+	  resetBoard.addEventListener('click',function (e){
+		board.reset();
+	  })
+	  resetGame.innerHTML = "Reselect game settings";
+	  resetGame.addEventListener('click',function (e){
+		board.reset();
+		name1input.value = "Player 1";
+		displaySelection();
+	  })
+	
+	  gameScreen.style.display = 'none';
+	
+	  screenC.appendChild(screenText);
+	  document.body.appendChild(selectionContainer);
+	
+	  gameScreen.append(screenC, gameBody, resetBoard, resetGame);
+	  document.body.appendChild(gameScreen);
+	
+	  const displaySelection = () =>{
+		selectionContainer.style.display = '';
+		nameContainer.style.display = 'none';
+		gameScreen.style.display = 'none';
+	  };
+	
+	  const displayGame = () =>{
+		selectionContainer.style.display = 'none';
+		nameContainer.style.display = 'none';
+		gameScreen.style.display = '';
+	  };
+	
+	  const displayName = (numPlayers) =>{
+		nameContainer.style.display = '';
+		if(numPlayers == 1) {
+		  nameMessage.innerHTML = "Input your Name:";
+		  name2input.style.display = 'none';
 		}
-		
-		return this.addContent();
-		
-	}
+		else{
+		  nameMessage.innerHTML = "Input your Names:";
+		  name2input.style.display = '';
+		}
+		selectionContainer.style.display = 'none';
+		gameScreen.style.display = 'none';
+	  }
 	
-	initialize () {
-		this.container.addEventListener('click', this.clickHandler.bind(this));
-	}
-}
-
-for (let i = 0; i < items.length; i++) {
+	})();
+	//end 
 	
-	// pass in the cell and index
-	items[i] = new Tile(items[i], i);
 	
-}
-
-function checkWin() {
 	
-	let winner;
 	
-	for ( let condition of winConditions ) {
-		
-		if ( boardItems[condition[0]] === boardItems[condition[1]]
-    		&& boardItems[condition[0]] === boardItems[condition[2]]
-		    && boardItems[condition[0]] !== undefined ) {
-			
-			if ( turn === 0 ) {
-				winner = 'O';
-			} else {
-				winner = 'X';
+	//Board module
+	const board =  (() => {
+	  const container = document.querySelector('#game-body');
+	  const screenText = document.querySelector('#screen-text');
+	
+	  let victory = false;
+	  let playerOneTurn = true;
+	  let mode = 0;
+	  let squaresLeft = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+	  let player1 = {};
+	  let player2 = {};
+	  let buttons = [["","",""],["","",""],["","",""]];
+	  let move = 0;
+	
+	  for(let i = 0; i<3;i++){
+		for(let j = 0; j<3;j++){
+		  let content = document.createElement('button');
+		  content.classList.add('play-button');
+		  content.classList.add('row' + i);
+		  content.classList.add('col' + j);
+		  content.innerHTML = "";
+		  content.addEventListener('click',function (e){
+			if(e.target.innerHTML=="" && !victory){
+			  squaresLeft.splice(squaresLeft.indexOf(i*3+j),1);
+			  if (playerOneTurn) {
+				e.target.innerHTML = "o";
+				generateCheckWin(buttons);
+	
+				if(!victory && squaresLeft.length > 0){
+				  if(mode == 0) screenText.innerHTML = player2.name + "'s turn!";
+				  else if (mode == 1) easyMove();
+				  else hardMove();
+				  if(mode !=0 )playerOneTurn = !playerOneTurn;
+				}
+			  }
+			  else {
+				e.target.innerHTML = "x";
+				screenText.innerHTML = player1.name + "'s turn!";
+				generateCheckWin(buttons);
+			  }
+	
+			  if(victory){
+				if(playerOneTurn) screenText.innerHTML = player1.name + " won!";
+				else screenText.innerHTML = player2.name + " won!";
+			  }
+			  else if (squaresLeft.length == 0) screenText.innerHTML = "The game is tied!";
+	
+			  playerOneTurn = !playerOneTurn;
 			}
-			
-			board.classList.add('finished');
-		
-	    	winStatus.innerHTML = `${winner} Wins!`;
-			
-	    }
-		
-	}
+		  })
+		  buttons[i][j] = content;
+		  container.appendChild(content);
+		}
+	  }
 	
-}
-
-board.addEventListener('click', checkWin);
-
-function resetGame() {
-	turn = 0;
-	boardItems = [];
+	  const reset = () => {
+		victory = false;
+		playerOneTurn = true;
+		squaresLeft = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+		for(let i = 0; i<3; i++){
+		  for(let j = 0; j<3; j++){
+			buttons[i][j].innerHTML = "";
+			buttons[i][j].style.color = 'black';
+		  }
+		}
 	
-	board.classList.remove('finished');
+		screenText.innerHTML = player1.name + "'s turn!";
+	  }
 	
-	winStatus.innerHTML = '';
+	  const addPlayers = (play1, play2) =>{
+		player1 = play1;
+		player2 = play2;
+		screenText.innerHTML = player1.name + "'s turn!";
+	  }
 	
-	for (let i = 0; i < items.length; i++) {
-		
-		let newItem = document.createElement('span');
+	  const addPlayer = (play1) =>{
+		player1 = play1;
+		screenText.innerHTML = player1.name + "'s turn!";
+	  }
 	
-	    items[i].parentNode.replaceChild(newItem, items[i]);
-		
-		// pass in the cell and index
-    	items[i] = new Tile(items[i], i);
 	
-    }
-
-}
-
-button.addEventListener('click', resetGame, false);
+	  const hardMove = () =>{
+		let dumb = buttons;
+		minimax(dumb, squaresLeft, 0, false);
+		buttons[Math.floor(move/3)][move%3].innerHTML= "x";
+		squaresLeft.splice(squaresLeft.indexOf(move), 1);
+		for(let i = 0; i<3;i++){
+		  for(let j = 0; j<3; j++){
+			buttons[i][j].style.color = 'black';
+		  }
+		}
+	
+		generateCheckWin(buttons);
+	
+	} 
+	
+	  const setMode = (modeChoice) => {
+		mode = modeChoice;
+	  }
+	
+	  const generateCheckWin = (buttonsI) => {
+		checkVictory(buttonsI[0][0], buttonsI[0][1],buttonsI[0][2]);
+		checkVictory(buttonsI[1][0], buttonsI[1][1],buttonsI[1][2]);
+		checkVictory(buttonsI[2][0], buttonsI[2][1],buttonsI[2][2]);
+		checkVictory(buttonsI[0][0], buttonsI[1][0],buttonsI[2][0]);
+		checkVictory(buttonsI[0][1], buttonsI[1][1],buttonsI[2][1]);
+		checkVictory(buttonsI[0][2], buttonsI[1][2],buttonsI[2][2]);
+		checkVictory(buttonsI[0][0], buttonsI[1][1],buttonsI[2][2]);
+		checkVictory(buttonsI[0][2], buttonsI[1][1],buttonsI[2][0]);
+	  };
+	
+	  const checkVictory = (box1, box2, box3) =>{
+		if(box1.innerHTML == box2.innerHTML &&
+		  box2.innerHTML == box3.innerHTML && box3.innerHTML != ""){
+			victory = true;
+			box1.style.color = 'red';
+			box2.style.color = 'red';
+			box3.style.color = 'red';
+		  }
+	  };
+	
+	
+	  const score = (depth, win, turn) =>{
+		if (win && turn) return (10 - depth);
+		else if (win&& !turn) return (depth - 10);
+		else return 0;
+	  }
+	
+	  const minimax = (buttonsInput, currState, depth, turn) => {
+	
+		let scores = [];
+		let dummy = new Array(currState.length);
+		let index = -1;
+	
+		turn = !turn;
+		depth ++;
+	
+		for(let i = 0; i < currState.length; i++){
+		  dummy[i] = currState[i];
+		}
+	
+		generateCheckWin(buttonsInput);
+	
+	
+		if(currState.length == 0 || victory) {
+		  turn = !turn;
+		  let finalScore = score(depth, victory, turn);
+		  victory = false;
+	
+		  return finalScore;
+		}
+	
+	
+		for(let i = 0; i<currState.length; i++){
+		  if(!turn) buttonsInput[Math.floor(dummy[i]/3)][dummy[i]%3].innerHTML= "o";
+		  else buttonsInput[Math.floor(dummy[i]/3)][dummy[i]%3].innerHTML = "x";
+		  dummy.splice(i,1);
+		  scores.push(minimax(buttonsInput, dummy, depth, turn));
+		  buttonsInput[Math.floor(currState[i]/3)][currState[i]%3].innerHTML = "";
+		  dummy.splice(i,0,currState[i]);
+		}
+	
+		if(depth % 2 != 0) index = scores.indexOf(Math.max.apply(null, scores));
+		else index = scores.indexOf(Math.min.apply(null, scores));
+	
+		move = currState[index];
+		return scores[index];
+	  }
+	
+	  return {addPlayers, reset, setMode};
+	})();
+	
+	
+	
+	const playerFactory = (name) => {
+	  return {name};
+	};
+	
