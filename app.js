@@ -21,6 +21,18 @@ const winConditions = [
 	
 ];
 
+class humanPlayer {
+
+}
+
+class computerPlayer {
+
+}
+
+class winningMeans {
+	
+}
+
 class Tile {
 	
 	// constructor is used for setting up the variables
