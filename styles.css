@@ -11,6 +11,11 @@ body {
 
 }
 
+wrapper {
+	text-align: center;
+  align-items:center;
+  justify-content:center;
+}
 
 .play-button{
   height: auto;
