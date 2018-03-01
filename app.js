@@ -9,7 +9,7 @@ const selectionScreen = (() => {
 	  let buttonContainer = document.createElement('table');
 	
 	  welcomeMessage.id = "welcome-message";
-	  welcomeMessage.innerHTML = "Welcome to Tic-Tac-Toe by eMel \n Select your mode:";
+	  welcomeMessage.innerHTML = "Welcome to Tic-Tac-Toe by eMel";
 	  Computer.id = "computer";
 	  Computer.innerHTML = "Computer";
 	  Computer.addEventListener('click',function (e){
@@ -68,11 +68,11 @@ const selectionScreen = (() => {
 	  gameBody.id = "game-body";
 	  resetBoard.id = "reset-board";
 	  resetGame.id = "reset-game";
-	  resetBoard.innerHTML = "RESET BOARD";
+	  resetBoard.innerHTML = "Reset";
 	  resetBoard.addEventListener('click',function (e){
 		board.reset();
 	  })
-	  resetGame.innerHTML = "Reselect game settings";
+	  resetGame.innerHTML = "Reselect";
 	  resetGame.addEventListener('click',function (e){
 		board.reset();
 		name1input.value = "Player 1";
